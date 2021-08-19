@@ -139,79 +139,48 @@ void loop(){
           }
       if (counter > 60){
         
-            //PID code for when drone pitches in positive direction 
-            error = pitch - 0; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
-            error_i += error/2; 
-            if (error_i >= 180){
-              error_i = 180;  
-            }
-            if (error  <2 and error >-2){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
-              error_i = 0;
-            }
-            p_output = error*p_gain+off_value;
-            i_output = error_i*i_gain+off_value;
-            d_output = (error-previous_error) * d_gain; 
-            pid_output = (p_output+i_output+d_output)/2;
-            bm4.write(pid_output);
-            bm2.write(pid_output);
-            previous_error = error; 
+         if (roll <0){
+          //PID code for when drone rolls in negative direction 
+          error2 = (roll - 0)*-1; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
+          error_i2 += error2; 
+          if (error_i2 >= 180){
+            error_i2 = 180;  
+          }
+          if (error2  <2 and error2 >-2){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
+            error_i2 = 0;
+          }
+          p_output2 = error2*p_gain2*-1+off_value;
+          i_output2 = error_i2*i_gain2+off_value;
+          d_output2 = (error2-previous_error2) * d_gain2; 
+          pid_output2 = (p_output2+i_output2+d_output2)/2;
+          Serial.println(pid_output2);
+          bm4.write(pid_output2);
+          bm3.write(pid_output2);  
+          previous_error2 = error2;
+         }      
+       if (roll >0){
+          //PID code for when drone rolls in negative direction 
+          error3 = (roll - 0); //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
+          error_i3 += error3; 
+          if (error_i3 >= 180){
+            error_i3 = 180;  
+          }
+          if (error3  <2 and error3 >-2){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
+            error_i3 = 0;
+          }
+          p_output3 = error3*p_gain3*-1+off_value;
+          i_output3 = error_i3*i_gain3+off_value;
+          d_output3 = (error3-previous_error3) * d_gain3; 
+          pid_output3 = (p_output3+i_output3+d_output3)/2;
+          Serial.println(pid_output3);
+          bm2.write(pid_output3-32);
+          bm1.write(pid_output3);  
+          previous_error3 = error3;
+         }      
 
-
-           
-            //PID code for when drone pitches in negative direction 
-            error1 = (pitch - 0)*-1; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
-            error_i1 += error1/2; //divide error by 2 so that error_i won't be too big when error(degrees drone is tilted) is a lot and just won't be as big in general - this helps in keeping motors from reaching max speed when error is medium
-            if (error_i1 >= 180){
-              error_i1 = 180;  
-              }
-            if (error1 == 0){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
-              error_i1 = 0;
-            }
-            p_output1 = error1*p_gain1+off_value;
-            i_output1 = error_i1*i_gain1+off_value;
-            d_output1 = (error1-previous_error1) * d_gain1; 
-            pid_output1 = (p_output1+i_output1+d_output1)/2; //divide by 2 so that motors just don't spin at max speed so soon when drone pitches backward 
-            bm3.write(pid_output1);
-            bm1.write(pid_output1);  
-            previous_error1 = error1; 
-
-
-            
-            //PID code for when drone rolls in negative direction 
-            error2 = (roll - 0)*-1; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
-            error_i2 += error2; 
-            if (error_i2 >= 180){
-              error_i2 = 180;  
-            }
-            if (error2  <2 and error2 >-2){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
-              error_i2 = 0;
-            }
-            p_output2 = error2*p_gain2*-1+off_value;
-            i_output2 = error_i2*i_gain2+off_value;
-            d_output2 = (error2-previous_error2) * d_gain2; 
-            pid_output2 = (p_output2+i_output2+d_output2)/2;
-            bm3.write(pid_output2);
-            bm4.write(pid_output2);  
-            previous_error2 = error2; 
-
-
-        
-            //PID code for when drone rolls in positive direction 
-            error3 = roll - 0; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
-            error_i3 += error3; 
-            if (error_i3 >= 180){
-              error_i3 = 180;  
-            }
-            if (error3  <2 and error3 >-2){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
-              error_i3 = 0;
-            }
-            p_output3 = error3*p_gain3+off_value;
-            i_output3 = error_i3*i_gain3+off_value;
-            d_output3 = (error3-previous_error3) * d_gain3; 
-            pid_output3 = (p_output3+i_output3+d_output3)/2;
-            bm2.write(pid_output3);
-            bm1.write(pid_output3);    
-            previous_error3 = error3; 
-      }
+      
    
+
+  }
+
 }
