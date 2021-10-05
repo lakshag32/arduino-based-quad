@@ -138,7 +138,25 @@ void loop(){
             counter += 1; 
           }
       if (counter > 60){
-        
+         if (pitch <0){
+          //PID code for when drone rolls in negative direction 
+          error = (pitch - 0)*-1; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
+          error_i += error; 
+          if (error_i >= 180){
+            error_i = 180;  
+          }
+          if (error  <2 and error >-2){ //set error_i(accumulated error that is used for the i_output) equal to 0 when the drone is pretty much level - some leeway is given to prevent error_i from stacking up sooner and causing motors to spin too fast  
+            error_i = 0;
+          }
+          p_output = error*p_gain*-1+off_value;
+          i_output = error_i*i_gain+off_value;
+          d_output = (error-previous_error) * d_gain; 
+          pid_output = (p_output+i_output+d_output)/2;
+          Serial.println(pid_output);
+          bm3.write(pid_output);
+          bm1.write(pid_output);  
+          previous_error = error;
+         }      
          if (roll <0){
           //PID code for when drone rolls in negative direction 
           error2 = (roll - 0)*-1; //0 is the angle that we want the drone to be at, if we want the drone to be at a different angle(for example, to move forward), subtract the pitch by that angle
